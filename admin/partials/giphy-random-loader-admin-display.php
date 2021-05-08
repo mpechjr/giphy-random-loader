@@ -54,7 +54,30 @@
 <form  name="form1"  method="post" action="">
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 <div style="margin-bottom:1em;">API <input type="text" name="<?php echo $data_field_api_name ?>" value="<?php echo $giphy_api ?>"> </div>
-<div>Search terms <input type="text" name="<?php echo $data_field_name ?>" value="<?php echo $giphy_search ?>"></div>
+<div>Search terms <input type="text" name="<?php    echo $data_field_name ?>" value="<?php echo $giphy_search ?>"></div>
 <input type="submit">
 </form>
+</div>
+<div>
+<h1>Images</h1>
+<?php 
+$api_url = 'https://api.giphy.com/v1/gifs/search?api_key='.$giphy_api.'&limit=5&q='.$giphy_search;
+		
+$response = wp_remote_get( $api_url );
+$content = '';
+if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+  $headers = $response['headers']; // array of http header lines
+  $body = $response['body']; // use the content
+  
+  $items = json_decode($body);
+
+  foreach($items->data as $item){
+     
+    $giphy_url =  $item->images->original->url;
+    $content.= '<img src="'.$giphy_url.'">';	
+  }
+}
+
+echo $content;
+?>
 </div>
