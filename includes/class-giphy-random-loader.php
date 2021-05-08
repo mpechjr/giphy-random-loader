@@ -157,7 +157,7 @@ class Giphy_Random_Loader {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu',$plugin_admin, 'giphy_loader');
-		
+		$this->loader->add_filter('pre_get_avatar_data',$plugin_admin,'get_giphy_avatar',);
 
 	}
 

@@ -119,6 +119,20 @@ class Giphy_Random_Loader_Admin {
 		include_once( plugin_dir_path( __FILE__ ) .'partials/giphy-random-loader-admin-display.php' );
 	}
 
+	public  function get_giphy_avatar( $data ) {
+		$user_id = get_current_user_id();
+		$giphy_avatar_url = get_user_meta( $user_id, 'giphy_profile_image', true );
+		if ( empty( $giphy_avatar_url ) ) {
+			return $data;
+		}
+		 
+		if ( $giphy_avatar_url ) {
+			$data['url'] = $giphy_avatar_url;
+		}
+		 
+		return $data;
+	}
+
 
 }
 	

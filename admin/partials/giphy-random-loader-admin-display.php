@@ -28,6 +28,9 @@
  $hidden_field_name = 'submit_hidden';
  $data_field_api_name = 'giphy_api';
  $data_field_name = 'giphy_search';
+
+ $hidden_field_name_giphy = 'submit_hidden_giphy';
+ $data_field_giphy_selected_name = 'giphy_selected';
  // Read in existing option value from database
  
 
@@ -44,9 +47,30 @@
      update_option( $opt_search_name, $opt_val_search );
 
  }
+ $user_id = get_current_user_id();
+ 
+  // See if the user has posted us some information
+ // If they did, this hidden field will be set to 'Y'
+ if( isset($_POST[ $hidden_field_name_giphy ]) && $_POST[ $hidden_field_name_giphy ] == 'Y' ) {
+  // Read their posted value
+  $opt_val_selected = $_POST[ $data_field_giphy_selected_name ];
 
- $giphy_api= get_option($opt_api_name);
- $giphy_search= get_option($opt_search_name);
+  // Save the posted value in the database
+   
+  $user_data = update_user_meta(  $user_id, 'giphy_profile_image', $opt_val_selected  );
+ 
+  if ( is_wp_error( $user_data ) ) {
+      // There was an error; possibly this user doesn't exist.
+      echo 'Error.';
+  } else {
+      // Success!
+      echo 'User profile updated.';
+  }
+
+} 
+
+$giphy_api= get_option($opt_api_name);
+$giphy_search= get_option($opt_search_name);
 ?>
 
 <div class="">
@@ -65,19 +89,25 @@ $api_url = 'https://api.giphy.com/v1/gifs/search?api_key='.$giphy_api.'&limit=5&
 		
 $response = wp_remote_get( $api_url );
 $content = '';
-if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+if ( is_array( $response ) && ! is_wp_error( $response ) && !empty($giphy_api)) {
   $headers = $response['headers']; // array of http header lines
   $body = $response['body']; // use the content
   
   $items = json_decode($body);
-
+   
+  ?>
+  <form name="form1"  method="post" action="">
+  <input type="hidden" name="<?php echo $hidden_field_name_giphy; ?>" value="Y">
+<?php 
   foreach($items->data as $item){
      
     $giphy_url =  $item->images->original->url;
-    $content.= '<img src="'.$giphy_url.'">';	
+    $content.= '<input type="radio" name="'.$data_field_giphy_selected_name.'" value="'.$giphy_url.'"><label ><img src="'.$giphy_url.'"></label>';	
   }
 }
 
 echo $content;
 ?>
+<input type="submit">
+</form>
 </div>
