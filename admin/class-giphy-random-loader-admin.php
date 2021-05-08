@@ -103,8 +103,8 @@ class Giphy_Random_Loader_Admin {
 	public function giphy_loader() {
 		//add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, 
 		add_menu_page(
-			__( 'Custom Menu Title', 'textdomain' ),
-			'custom menu',
+			__( 'Giphy Loader', 'textdomain' ),
+			'Giphy Loader',
 			'manage_options',
 			'giphy-loader',
 			array( $this, 'include_overview_partial' ),

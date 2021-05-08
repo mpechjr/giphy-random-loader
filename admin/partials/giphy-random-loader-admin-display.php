@@ -102,7 +102,7 @@ if ( is_array( $response ) && ! is_wp_error( $response ) && !empty($giphy_api)) 
   foreach($items->data as $item){
      
     $giphy_url =  $item->images->original->url;
-    $content.= '<input type="radio" name="'.$data_field_giphy_selected_name.'" value="'.$giphy_url.'"><label ><img src="'.$giphy_url.'"></label>';	
+    $content.= '<input type="radio" name="'.$data_field_giphy_selected_name.'" value="'.$giphy_url.'"><label ><img src="'.$giphy_url.'"></label><br>';	
   }
 }
 

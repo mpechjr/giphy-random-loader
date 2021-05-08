@@ -100,4 +100,37 @@ class Giphy_Random_Loader_Public {
 
 	}
 
+	public function giphy_shortcode() {
+		add_shortcode( 'giphyloader', array( $this, 'giphy_loader_function') );
+	  }
+
+	public function giphy_loader_function($atts) {
+
+		$opt_api_name = 'giphy_api';
+		$opt_search_name = 'giphy_search';
+		$giphy_api= get_option($opt_api_name);
+		$giphy_search= get_option($opt_search_name);
+
+		$api_url = 'https://api.giphy.com/v1/gifs/search?api_key='.$giphy_api.'&limit=5&q='.$giphy_search;
+		
+		$response = wp_remote_get( $api_url );
+		$content = '';
+		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+			$headers = $response['headers']; // array of http header lines
+			$body = $response['body']; // use the content
+			
+			$items = json_decode($body);
+		
+			foreach($items->data as $item){
+				 
+				$giphy_url =  $item->images->original->url;
+				$content.= '<img src="'.$giphy_url.'">';	
+			}
+		}
+	 
+		return $content;
+	}
+
+
+
 }
