@@ -101,18 +101,22 @@ class Giphy_Random_Loader_Admin {
 	}
 	
 	public function giphy_loader() {
+		//add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, 
 		add_menu_page(
 			__( 'Custom Menu Title', 'textdomain' ),
 			'custom menu',
 			'manage_options',
-			plugin_dir_url( __FILE__ ) .'partials/giphy-random-loader-admin-display.php',
+			'giphy-loader',
+			array( $this, 'include_overview_partial' ),
 			'',
 			'',
 			6
 		);
- 
 
-		
+		 
+	}
+	public function include_overview_partial() {
+		include_once( plugin_dir_path( __FILE__ ) .'partials/giphy-random-loader-admin-display.php' );
 	}
 
 
